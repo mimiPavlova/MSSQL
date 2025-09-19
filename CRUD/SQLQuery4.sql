@@ -204,6 +204,14 @@ ORDER BY Salary DESC,
  
    SELECT Salary 
    FROM Employees;
+
+
+   --Problem 24
+
+   USE Geography
+   GO
+
+
   
 
 
