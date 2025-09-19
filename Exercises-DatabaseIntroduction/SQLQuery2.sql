@@ -7,7 +7,7 @@ Picture VARBINARY(MAX) NULL,
 Height DECIMAL(6, 2)  NULL,
 [Weight] DECIMAL(5, 2) NULL,
 Gender CHAR(1) 
-CONSTRAINT _gender CHECK (Gender in('m', 'f')),
+CONSTRAINT _gender CHECK (Gender IN('m', 'f')),
 BirthDate DATE NOT NULL,
 Biography NVARCHAR(MAX)  NULL
 )
