@@ -1,1 +1,3 @@
 # MySQL
+3 weeks to learn TSQL
+DAY 1-MAKING DATABASES, TABLES, ECT==
