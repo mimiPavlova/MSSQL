@@ -4,8 +4,13 @@ PeakName
 FROM Peaks ORDER BY PeakName;
 
 --PROBLEM 23
-SELECT 
-CountryName,
-Population
-FROM Countries 
-ORDER BY [Population] DESC, CountryName;
+
+  SELECT TOP 30
+  CountryName,
+  [Population]
+  FROM Countries 
+  WHERE	ContinentCode='EU'
+  ORDER BY [Population] DESC,
+   CountryName;
+
+SELECT *FROM Countries
