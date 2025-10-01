@@ -1,5 +1,5 @@
 --1. One-To-One Relationship
-
+USE MASTER 
 CREATE DATABASE TableRelations
 
 GO
@@ -59,10 +59,128 @@ VALUES ('X1', 1),
 
 	   --3. Many-To-Many Relationship
 
+	   CREATE TABLE Students(
+	   StudentID INT PRIMARY KEY IDENTITY,
+	   [Name] VARCHAR(50) NOT NULL
+	   )
+	   CREATE TABLE Exams(
+	   ExamID INT PRIMARY KEY IDENTITY(101, 1),
+	   [Name] VARCHAR(100) NOT NULL
+	   )
+
+	   --MAPPING TABLE
+	   CREATE TABLE StudentsExams(
+	   StudentID INT FOREIGN KEY REFERENCES Students(StudentID) NOT NULL,
+	   ExamID INT FOREIGN KEY REFERENCES Exams(ExamID) NOT NULL,
+	    CONSTRAINT PK_Composite_StudentID_ExamID PRIMARY KEY(StudentID, ExamID) 
+
+	   );
+
+INSERT INTO Students([Name])
+VALUES('Mila'), ('Toni'), ('Ron');
+
+INSERT INTO Exams([Name])
+VALUES ('StudentsExams'), ('Neo4j'), ('Oracle 11g');
+
+INSERT INTO StudentsExams(StudentID, ExamID)
+VALUES 
+      (1, 101),
+	  (1, 102),
+	  (2, 101),
+	  (3, 103),
+	  (2, 102),
+	  (2, 103);
+
+
+
+	  --4. Self-Referencing
+
+	  CREATE TABLE Teachers(
+	  TeacherID INT PRIMARY KEY IDENTITY(101,1),
+	  [Name] VARCHAR(60) NOT NULL,
+	  ManagerID INT FOREIGN KEY
+	  REFERENCES Teachers(TeacherID)
+	  )
+
+
+	   INSERT INTO Teachers ([Name], ManagerID)
+	   VALUES
+	        ('John', NULL),
+			('Maya', 106),
+			('Silvia', 106),
+			('Ted', 105),
+			('Mark', 101),
+			('Greata', 101);
+
+
+
+	   --5. Online Store Database
+
+	   CREATE TABLE ItemTypes(
+	   ItemTypeID INT PRIMARY KEY,
+	   [Name] VARCHAR(50) NOT NULL
+	   )
+
+	   CREATE TABLE Items(
+	   ItemID INT PRIMARY KEY,
+	   [Name] VARCHAR (50) NOT NULL,
+	   ItemTypeID INT FOREIGN KEY REFERENCES ItemTypes(ItemTypeID)
+	   )
+
+	    CREATE TABLE Cities(
+  CityID INT PRIMARY KEY,
+  [Name] VARCHAR(50) NOT NULL
+  )
+  CREATE TABLE Customers(
+  CustomerID INT PRIMARY KEY,
+  [Name] VARCHAR(50) NOT NULL,
+  Birthday DATE NOT NULL,
+  CityID INT FOREIGN KEY REFERENCES Cities(CityID)
+)
+CREATE TABLE Orders(
+OrderID INT PRIMARY KEY,
+CustomerID INT FOREIGN KEY REFERENCES Customers(CustomerID))
+
+CREATE TABLE OrderItems(
+OrderID INT FOREIGN KEY REFERENCES Orders(OrderID),
+ItemID INT FOREIGN KEY REFERENCES Items(ItemID)
+CONSTRAINT FK_OrderItems_Items_Orders
+PRIMARY KEY(OrderID, ItemID)
+)
+
+
+
+--6. University Database
+
+CREATE TABLE Majors(
+MajorID INT PRIMARY KEY,
+[Name] VARCHAR(50)
+)
+
+CREATE TABLE Students(
+StudentID INT PRIMARY KEY,
+StudentNumber INT NOT NULL,
+StudentName VARCHAR(80),
+MajorID INT FOREIGN KEY REFERENCES Majors(MajorID)
+)
+CREATE TABLE Payments(
+PaimentID INT PRIMARY KEY,
+PaymentDate DATE NOT NULL,
+PaymentAmount DECIMAL(10, 2) NOT NULL,
+StudentID INT FOREIGN KEY REFERENCES Students(StudentID)
+)
+CREATE TABLE Subjects(
+SubjectID INT PRIMARY KEY,
+SubjectName VARCHAR(50) NOT NULL);
+CREATE TABLE Agenda (
+StudentID INT FOREIGN KEY REFERENCES Students(StudentID),
+SubjectID INT FOREIGN KEY REFERENCES Subjects(SubjectID),
+CONSTRAINT FK_Agenda_Students_Subjects PRIMARY KEY(StudentID, SubjectID))
 
 USE Geography
 GO
 --EX 9
+
 SELECT
 m.MountainRange,
 p.PeakName,
@@ -72,5 +190,3 @@ ON m.Id=P.MountainId
 	WHERE m.MountainRange='Rila'
 	ORDER BY
 	p.Elevation DESC 
-
-
