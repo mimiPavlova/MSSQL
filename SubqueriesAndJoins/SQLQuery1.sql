@@ -203,4 +203,89 @@ ORDER BY e.EmployeeID
 
 · ProjectName
 
-Filter all the projects of employee with Id 24. If the project has started during or after 2005 the returned value should be NULL.
+Filter all the projects of employee with Id 24.
+If the project has started during or after 2005 
+the returned value should be NULL.*/
+
+
+SELECT 
+e.EmployeeID,
+e.FirstName,
+     CASE
+     WHEN p.StartDate>='2005-01-01' THEN NULL
+     ELSE p.Name
+     END AS ProjectName
+FROM Employees AS e
+JOIN
+(
+EmployeesProjects AS ep
+JOIN Projects AS p
+ON ep.ProjectID=p.ProjectID
+
+)
+ON 
+e.EmployeeID=EP.EmployeeID
+WHERE ep.EmployeeID=24
+
+/*
+9. Employee Manager
+
+Create a query that selects:
+
+· EmployeeID
+
+· FirstName
+
+· ManagerID
+· ManagerName
+
+Filter all employees with a manager 
+who has ID equals to 3 or 7. Return 
+all the rows, sorted by EmployeeID in
+ascending order*/
+
+SELECT
+e.EmployeeID,
+E.FirstName,
+m.EmployeeID,
+m.FirstName
+FROM Employees AS e
+JOIN Employees AS m
+ON e.ManagerID=M.EmployeeID
+WHERE m.EmployeeID IN (3, 7)
+ORDER BY e.EmployeeID
+
+/*10. Employees Summary
+
+Create a query that selects:
+
+· EmployeeID
+
+· EmployeeName
+
+· ManagerName
+
+· DepartmentName
+
+Show the first 50 employees with their managers and the departments they are in
+(show the departments of the employees). Order them by EmployeeID.*/
+
+
+
+SELECT TOP 50
+e.EmployeeID,
+CONCAT_WS(' ', e.FirstName, e.LastName) AS EmployeeName,
+CONCAT_WS(' ', m.FirstName, m.LastName) AS ManagerName,
+d.Name AS DepartmentName
+FROM 
+(
+Employees AS e
+JOIN Employees AS m
+ON e.ManagerID=m.EmployeeID
+) 
+JOIN Departments AS d
+ON d.DepartmentID=e.DepartmentID
+ORDER BY EmployeeID
+
+
+
