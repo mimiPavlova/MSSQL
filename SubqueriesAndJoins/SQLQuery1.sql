@@ -1,3 +1,6 @@
+USE SoftUni
+GO
+
 /*1. Employee Address
 
 Create a query that selects:
@@ -286,6 +289,117 @@ ON e.ManagerID=m.EmployeeID
 JOIN Departments AS d
 ON d.DepartmentID=e.DepartmentID
 ORDER BY EmployeeID
+
+
+/*11. Min Average Salary
+
+Create a query that returns the value of the 
+lowest average salary of all departments*/
+
+
+SELECT TOP 1 
+
+AVG(e.Salary) AS MinAverageSalary
+FROM Employees as e
+JOIN Departments as d
+ON e.DepartmentID=d.DepartmentID
+--NB! GROUP THE RESULTS 
+GROUP BY d.DepartmentID
+ORDER BY MinAverageSalary 
+
+
+--Part II – Queries for Geography Database
+USE Geography
+GO
+
+/*12. Highest Peaks in Bulgaria
+
+Create a query that selects:
+
+· CountryCode
+
+· MountainRange
+
+· PeakName
+· Elevation
+
+Filter all the peaks in Bulgaria, which have elevation over 2835. Return 
+all the rows, sorted by elevation in descending order.*/
+
+
+SELECT 
+c.CountryCode,
+m.MountainRange,
+p.PeakName,
+p.Elevation
+FROM 
+(
+Countries AS c
+JOIN MountainsCountries AS mc
+ON c.CountryCode=mc.CountryCode
+)
+JOIN
+(
+Mountains AS m
+JOIN Peaks AS p
+ON m.Id=p.MountainId
+)
+ON mc.MountainId=m.Id
+WHERE c.CountryName='Bulgaria'
+AND p.Elevation>2835
+ORDER BY  p.Elevation DESC 
+
+/*
+13. Count Mountain Ranges
+
+Create a query that selects:
+
+· CountryCode
+
+· MountainRanges
+
+Filter the count of the mountain ranges in the United States, Russia and Bulgaria
+*/
+
+
+SELECT 
+c.CountryCode,
+COUNT(mc.MountainId) AS MountainRanges
+FROM 
+Countries AS c
+ LEFT JOIN
+ MountainsCountries AS mc 
+ ON c.CountryCode=mc.CountryCode
+JOIN Mountains AS m
+ON mc.MountainId=m.Id
+WHERE c.CountryName IN ('United States', 'Russia', 'Bulgaria')
+GROUP BY c.CountryCode
+
+
+/*
+14. Countries With or Without Rivers
+Create a query that selects:
+
+· CountryName
+
+· RiverName
+
+Find the first 5 countries with or without rivers in Africa. Sort them by CountryName in ascending order*/
+
+--does't work
+SELECT TOP 5
+c.CountryName,
+r.RiverName
+FROM 
+Countries as c
+JOIN CountriesRivers AS cr
+ON c.CountryCode=cr.CountryCode
+JOIN 
+Rivers AS r
+ON r.Id=cr.RiverId
+
+ORDER BY c.CountryName
+
 
 
 
