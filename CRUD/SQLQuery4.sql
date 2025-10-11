@@ -211,7 +211,18 @@ ORDER BY Salary DESC,
    USE Geography
    GO
 
-
+   SELECT* FROM Countries
+   SELECT *FROM Currencies
   
 
 
+
+  SELECT 
+  CountryName,
+  CountryCode,
+  case  
+       WHEN CurrencyCode = 'EUR' THEN 'Euro'
+       ELSE   'Not EUR'
+       END AS Currency
+  FROM Countries
+  ORDER BY CountryName
